@@ -25,7 +25,7 @@ SECRET_KEY = '8(^!9_chm63tu+$et4(bo*fh%7zoxy0zus5b+6*%5vkl*ac6x&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['secret-temple-48086.herokuapp.com','127.0.0.1:8000']
+ALLOWED_HOSTS = ['secret-temple-48086.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -119,3 +119,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    #'/var/www/static/',
+]
+
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")

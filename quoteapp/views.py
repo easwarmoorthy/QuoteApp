@@ -33,7 +33,10 @@ def quote_view(request):
 		new_quote = form.save(commit=False)
 		new_quote.save()
 		return render(request,"quoteapp/quote.html",{"form":form})
-	return render(request,"quoteapp/quote.html",{"form":form})
+	all_quotes = QuoteModel.objects.all()
+	print(all_quotes)
+	context = {"form":form,"all_quotes":all_quotes}
+	return render(request,"quoteapp/quote.html",context)
 
 def register_view(request):
 	print(request.user.is_authenticated())

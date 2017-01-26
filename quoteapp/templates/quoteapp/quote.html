@@ -1,9 +1,15 @@
 {% block content %}
-
-<h1> Quote </h1>
-
-<form method='POST' action=''>{% csrf_token %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="/static/quoteapp/style.css" />
+<div class="login">
+  <h1> Quote </h1>
+<form action='' method="POST">{% csrf_token %}
 {{form}}
-<input type="submit" vlaue="ok"></input>
+<p class="submit"><input type="submit" value="Submit"></input></p>
 </form>
+
+{% for x in all_quotes %}
+<p>{{x.quote}}--{{x.qname}}</p>
+{% endfor %}
+</div>
 {% endblock content%}

@@ -1,10 +1,11 @@
 {% block content %}
-
+{% load static %}
+<link rel="stylesheet" type="text/css" href="/static/quoteapp/style.css" />
+<div class="login">
 <h1> Form </h1>
-
-<form method="POST" action='/quote/'>
-{% csrf_token %}
+<form method="POST" action='/quote/'>{% csrf_token %}
 {{form}}
-<input type="submit"></input>
+<p class="submit"><input type="submit"></input></p>
 </form>
+</div>
 {% endblock content%}
