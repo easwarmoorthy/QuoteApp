@@ -25,7 +25,7 @@ SECRET_KEY = '8(^!9_chm63tu+$et4(bo*fh%7zoxy0zus5b+6*%5vkl*ac6x&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['secret-temple-48086.herokuapp.com','127.0.0.1:8000']
 
 
 # Application definition
