@@ -1,0 +1,10 @@
+{% block content %}
+
+<h1> Form </h1>
+
+<form method="POST" action='/quote/'>
+{% csrf_token %}
+{{form}}
+<input type="submit"></input>
+</form>
+{% endblock content%}
