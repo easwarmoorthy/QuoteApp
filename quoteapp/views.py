@@ -11,42 +11,59 @@ from django.contrib.auth import(
 from .models import *
 from .forms import *
 def index(request):
-	return HttpResponse("Done!!!")
+	return render(request,"quoteapp/index.html")
 
 def login_view(request):
-	print("Login:")
-	print(request.user.is_authenticated())
 	form = UserLoginForm(request.POST or None)
+	title = "Login"
+	list1=""
+	context = {"form":form ,"list1":list1,"title":title}
 	if form.is_valid():
 		username = form.cleaned_data.get("username")
 		password = form.cleaned_data.get("password")
-		user = authenticate(username="username",password="password")
+		user = authenticate(username=username,password=password)
 		login(request,user)
-		print(request.user.is_authenticated())
-	return render(request, "quoteapp/form.html", {"form":form})
+		if user.is_authenticated():
+			list1 = QuoteModel.objects.all()
+			context = {"form":form ,"list1":list1,"title":title}
+			return render(request, "quoteapp/all.html", context)
+		else:
+			return render(request, "quoteapp/form.html", context)
+	return render(request, "quoteapp/form.html", context)
+
+def allquotes_view(request):
+	list1 = QuoteModel.objects.all()
+	context = {"list1":list1}
+	return render(request,"quoteapp/all.html",context)
 
 def quote_view(request):
 	form = QuoteForm(request.POST or None)
+	msg = None
+	print request.POST
 	if form.is_valid():
 		quote = form.cleaned_data["quote"]
 		qname = form.cleaned_data["qname"]
 		new_quote = form.save(commit=False)
 		new_quote.save()
-		return render(request,"quoteapp/quote.html",{"form":form})
-	all_quotes = QuoteModel.objects.all()
-	print(all_quotes)
-	context = {"form":form,"all_quotes":all_quotes}
+		msg = {"quote":quote,"qname":qname}
+		print msg
+	context = {"form":form,"msg":msg}
 	return render(request,"quoteapp/quote.html",context)
 
 def register_view(request):
-	print(request.user.is_authenticated())
 	form = UserRegisterForm(request.POST or None)
+	title = "Register"
+	list1 = None
 	if form.is_valid():
 		user = form.save(commit = False)
 		password = form.cleaned_data.get("password")
 		user.set_password(password)
 		user.save()
-		#login(request,user)
+		login(request,user)
+		list1 = QuoteModel.objects.all()
+		context = {"form":form ,"list1":list1,"title":title}
+		return render(request, "quoteapp/all.html", context)
+	context = {"form":form ,"list1":list1,"title":title}
 	return render(request,"quoteapp/form.html",{"form":form})
 
 def logout_view(request):

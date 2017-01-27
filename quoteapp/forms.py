@@ -16,7 +16,7 @@ class UserLoginForm(forms.Form):
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
         if username and password:
-            user = authenticate(username="username",password="password")
+            user = authenticate(username=username,password=password)
             if not user:
                 raise forms.ValidationError("User Not Exist")
             if not user.check_password(password):
@@ -26,16 +26,20 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm,self).clean(*args,**kwargs)
 
 class UserRegisterForm(forms.ModelForm):
-    email = forms.EmailField(label="Email")
-    email2 = forms.EmailField(label = "Confirm Email")
+#    email = forms.EmailField(label="Email")
+#    email2 = forms.EmailField(label = "Confirm Email")
     password = forms.CharField(widget = forms.PasswordInput)
     class Meta:
         model = User
         fields = [
             'username',
             'password',
-            'email'
         ]
+    def __init__(self, *args, **kwargs):
+        super(UserRegisterForm, self).__init__(*args, **kwargs)
+        for fieldname in ['username', 'password']:
+            self.fields[fieldname].help_text = None
+    """
     def clean(self,*args,**kwargs):
         email = self.cleaned_data.get("email")
         email2 = self.cleaned_data.get("email2")
@@ -45,6 +49,7 @@ class UserRegisterForm(forms.ModelForm):
         if email_qs.exists():
             raise forms.ValidationError("Already registered")
         return super(UserRegisterForm,self).clean(*args,**kwargs)
+    """
 
 """
 class QuotetextForm(forms.Form):
@@ -58,6 +63,12 @@ class QuoteForm(forms.ModelForm):
             'quote',
             'qname'
         ]
+    """
+    def clean_quote(self):
+        print self.cleaned_data.get("quote")
+    def clean_qname(self):
+        print self.cleaned_data.get("qname")
+        """
 """
     def clean(self,*args,**kwargs):
         quote = self.cleaned_data.get("quote")

@@ -1,11 +1,21 @@
 {% block content %}
 {% load static %}
+<link href="https://fonts.googleapis.com/css?family=Droid+Serif|Roboto" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/quoteapp/style.css" />
+<link rel="stylesheet" type="text/css" href="/static/quoteapp/style2.css" />
 <div class="login">
-<h1> Form </h1>
-<form method="POST" action='/quote/'>{% csrf_token %}
+  <title="{{title}}"></title>
+<h1> {{title}} </h1>
+<form method="POST" action=''>{% csrf_token %}
 {{form}}
 <p class="submit"><input type="submit"></input></p>
 </form>
 </div>
+{% ifequal title "Login" %}
+<div class="login log">
+  <h4>Register if you are not a user.</h4>
+  <form action="/register/">
+    <input class = "submit" type="submit" value="Register" />
+  </form>
+  {%endifequal%}
 {% endblock content%}

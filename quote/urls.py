@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^register/',register_view,name='register'),
     url(r'^index/',index,name='index'),
     url(r'^quote/',quote_view,name='quote'),
+    url(r'^all/',allquotes_view,name='allquotes')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

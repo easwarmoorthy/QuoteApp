@@ -1,0 +1,27 @@
+{% block content %}
+{% load static %}
+<link href="https://fonts.googleapis.com/css?family=Droid+Serif|Roboto" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/static/quoteapp/style2.css" />
+<link rel="stylesheet" type="text/css" href="/static/quoteapp/style.css" />
+<div class="head">
+<div class="logout">
+  <form action="/index/">
+    <input type="submit" value="Logout" />
+  </form>
+</div>
+<div class="logout">
+  <form action="/quote/">
+    <input type="submit" value="Add Quote" />
+  </form>
+</div>
+</div>
+{% for x in list1%}
+<div class="item">
+  <div class="quote">
+<p> {{x.quote}} </p></div>
+<div class="qname">
+<p> {{x.qname}} </p> </div>
+</div>
+{% endfor %}
+
+{% endblock content%}
