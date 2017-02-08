@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
@@ -23,6 +24,7 @@ def login_view(request):
 		password = form.cleaned_data.get("password")
 		user = authenticate(username=username,password=password)
 		login(request,user)
+		request.session['member_id'] = user.id
 		if user.is_authenticated():
 			list1 = QuoteModel.objects.all()
 			context = {"form":form ,"list1":list1,"title":title}
@@ -34,21 +36,31 @@ def login_view(request):
 def allquotes_view(request):
 	list1 = QuoteModel.objects.all()
 	context = {"list1":list1}
-	return render(request,"quoteapp/all.html",context)
+	try:
+		if request.session['member_id']:
+			return render(request,"quoteapp/all.html",context)
+	except KeyError:
+		form = "Please login to proceed"
+		return render(request,"quoteapp/index.html",{"form":form})
 
 def quote_view(request):
 	form = QuoteForm(request.POST or None)
 	msg = None
-	print request.POST
-	if form.is_valid():
-		quote = form.cleaned_data["quote"]
-		qname = form.cleaned_data["qname"]
-		new_quote = form.save(commit=False)
-		new_quote.save()
-		msg = {"quote":quote,"qname":qname}
-		print msg
-	context = {"form":form,"msg":msg}
-	return render(request,"quoteapp/quote.html",context)
+	try:
+		if request.session['member_id']:
+			if form.is_valid():
+				quote = form.cleaned_data["quote"]
+				qname = form.cleaned_data["qname"]
+				new_quote = form.save(commit=False)
+				new_quote.save()
+				msg = {"quote":quote,"qname":qname}
+				print msg
+			context = {"form":form,"msg":msg}
+			return render(request,"quoteapp/quote.html",context)
+	except KeyError:
+		form = "Please login to proceed"
+		return render(request,"quoteapp/index.html",{"form":form})
+
 
 def register_view(request):
 	form = UserRegisterForm(request.POST or None)
@@ -67,5 +79,10 @@ def register_view(request):
 	return render(request,"quoteapp/form.html",{"form":form})
 
 def logout_view(request):
-	logout(request)
-	return HttpResponse("Logged out")
+	print logout(request)
+	try:
+		del request.session['member_id']
+	except KeyError:
+		pass
+	form = "Logged out successfully"
+	return render(request,"quoteapp/form.html",{"form":form})
