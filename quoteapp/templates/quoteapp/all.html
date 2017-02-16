@@ -21,6 +21,15 @@
 <p> {{x.quote}} </p></div>
 <div class="qname">
 <p> {{x.qname}} </p> </div>
+
+<div class="">
+  <form action="/edit/{{x.id}}/">
+    <input type="submit" name = "{{x.id}}" value="Edit"/>
+  </form>
+  <form action="/delete/{{x.id}}/">
+    <input type="submit" name = "{{x.id}}" value="Delete"/>
+  </form>
+</div>
 </div>
 {% endfor %}
 

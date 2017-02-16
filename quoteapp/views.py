@@ -44,6 +44,8 @@ def allquotes_view(request):
 		return render(request,"quoteapp/index.html",{"form":form})
 
 def quote_view(request):
+	my_record = QuoteModel.objects.all()
+	#form = MyModelForm(instance=my_record)
 	form = QuoteForm(request.POST or None)
 	msg = None
 	try:
@@ -61,6 +63,37 @@ def quote_view(request):
 		form = "Please login to proceed"
 		return render(request,"quoteapp/index.html",{"form":form})
 
+def edit_view(request,pk):
+	my_record = QuoteModel.objects.get( id = pk)
+	#form = MyModelForm(instance=my_record)
+	form = QuoteForm(request.POST or None,instance=my_record)
+	msg = None
+	try:
+		if request.session['member_id']:
+			if form.is_valid():
+				quote = form.cleaned_data["quote"]
+				qname = form.cleaned_data["qname"]
+				#Entry.objects.filter(pub_date__year=2010).update(comments_on=False, headline='This is old')
+				QuoteModel.objects.filter(id = pk).update(quote=quote,qname = qname)
+				#QuoteModel.objects.filter(pk=quote.pk).update(active=True)
+				msg = {"quote":quote,"qname":qname}
+				print msg
+			context = {"form":form,"msg":msg}
+			return render(request,"quoteapp/quote.html",context)
+	except KeyError:
+		form = "Please login to proceed"
+		return render(request,"quoteapp/index.html",{"form":form})
+
+def delete_view(request,pk):
+	my_record = QuoteModel.objects.filter( id = pk).delete()
+	list1 = QuoteModel.objects.all()
+	context = {"list1":list1}
+	try:
+		if request.session['member_id']:
+			return render(request,"quoteapp/all.html",context)
+	except KeyError:
+		form = "Please login to proceed"
+		return render(request,"quoteapp/index.html",{"form":form})
 
 def register_view(request):
 	form = UserRegisterForm(request.POST or None)
@@ -85,4 +118,4 @@ def logout_view(request):
 	except KeyError:
 		pass
 	form = "Logged out successfully"
-	return render(request,"quoteapp/form.html",{"form":form})
+	return render(request,"quoteapp/index.html",{"form":form})

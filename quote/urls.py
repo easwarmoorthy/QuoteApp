@@ -22,10 +22,11 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^logout/',logout_view,name='logout'),
     url(r'^register/',register_view,name='register'),
-    #url(r'^index/',index,name='index'),
     url(r'^quote/',quote_view,name='quote'),
     url(r'^all/',allquotes_view,name='allquotes'),
-    url(r'^login/',login_view,name='login'),
+    url(r'^edit/(?P<pk>[0-9]+)/$',edit_view,name='editquotes'),
+    url(r'^delete/(?P<pk>[0-9]+)/$',delete_view,name='deletequotes'),
+    url(r'^login',login_view,name='login'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
