@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^quote/',quote_view,name='quote'),
     url(r'^all/',allquotes_view,name='allquotes'),
     url(r'^edit/(?P<pk>[0-9]+)/$',edit_view,name='editquotes'),
+    url(r'^search/',searchview,name ='searchview'),
     url(r'^delete/(?P<pk>[0-9]+)/$',delete_view,name='deletequotes'),
     url(r'^login',login_view,name='login'),
 ]

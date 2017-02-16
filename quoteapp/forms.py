@@ -38,6 +38,13 @@ class UserRegisterForm(forms.ModelForm):
         for fieldname in ['username', 'password']:
             self.fields[fieldname].help_text = None
 
+class SearchForm(forms.Form):
+    keyword = forms.CharField()
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        self.fields['keyword'].label = "Search by Name"
+
+
 class QuoteForm(forms.ModelForm):
     class Meta:
         model = QuoteModel

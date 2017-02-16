@@ -44,7 +44,6 @@ def allquotes_view(request):
 		return render(request,"quoteapp/index.html",{"form":form})
 
 def quote_view(request):
-	my_record = QuoteModel.objects.all()
 	#form = MyModelForm(instance=my_record)
 	form = QuoteForm(request.POST or None)
 	msg = None
@@ -56,7 +55,6 @@ def quote_view(request):
 				new_quote = form.save(commit=False)
 				new_quote.save()
 				msg = {"quote":quote,"qname":qname}
-				print msg
 			context = {"form":form,"msg":msg}
 			return render(request,"quoteapp/quote.html",context)
 	except KeyError:
@@ -94,6 +92,16 @@ def delete_view(request,pk):
 	except KeyError:
 		form = "Please login to proceed"
 		return render(request,"quoteapp/index.html",{"form":form})
+
+def searchview(request):
+    searchform = SearchForm(request.POST or None)
+    if searchform.is_valid():
+        keyword = searchform.cleaned_data.get("keyword")
+        list1 = QuoteModel.objects.all().filter( qname = keyword )
+        context = {"list1":list1}
+        return render(request, "quoteapp/all.html", context)
+    context = {"searchform":searchform}
+    return render(request, "quoteapp/search.html", context)
 
 def register_view(request):
 	form = UserRegisterForm(request.POST or None)

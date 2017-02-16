@@ -9,14 +9,14 @@
       <input type="submit" value="Search" />
     </form>
   </div>
-  <div class="logout">
-    <form action="/all/">
-      <input type="submit" value="View Quotes" />
-    </form>
-  </div>
 <div class="logout">
   <form action="/logout/">
     <input type="submit" value="Logout" />
+  </form>
+</div>
+<div class="logout">
+  <form action="/all/">
+    <input type="submit" value="View Quotes" />
   </form>
 </div>
 <div class="logout">
@@ -25,22 +25,16 @@
   </form>
 </div>
 </div>
+<form method= "POST" action="">{% csrf_token %}
+  {{searchform}}
+<p class="submit"><input type="submit"></input></p>
+</form>
 {% for x in list1%}
 <div class="item">
   <div class="quote">
 <p> {{x.quote}} </p></div>
 <div class="qname">
 <p> {{x.qname}} </p> </div>
-
-<div class="">
-  <form action="/edit/{{x.id}}/">
-    <input type="submit" name = "{{x.id}}" value="Edit"/>
-  </form>
-  <form action="/delete/{{x.id}}/">
-    <input type="submit" name = "{{x.id}}" value="Delete"/>
-  </form>
-</div>
-</div>
 {% endfor %}
 
 {% endblock content%}
