@@ -1,4 +1,4 @@
-
+from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
@@ -53,6 +53,7 @@ def quote_view(request):
 				quote = form.cleaned_data["quote"]
 				qname = form.cleaned_data["qname"]
 				new_quote = form.save(commit=False)
+				new_quote.user_id = request.session['member_id']
 				new_quote.save()
 				msg = {"quote":quote,"qname":qname}
 			context = {"form":form,"msg":msg}
@@ -84,24 +85,41 @@ def edit_view(request,pk):
 
 def delete_view(request,pk):
 	my_record = QuoteModel.objects.filter( id = pk).delete()
-	list1 = QuoteModel.objects.all()
+	cuser = request.session['member_id']
+	x = User.objects.get(id = cuser)
+	title = x.username
+	list1 = QuoteModel.objects.all().filter( user__username = x.username)
 	context = {"list1":list1}
 	try:
 		if request.session['member_id']:
-			return render(request,"quoteapp/all.html",context)
+			return render(request,"quoteapp/userpage.html",context)
 	except KeyError:
 		form = "Please login to proceed"
 		return render(request,"quoteapp/index.html",{"form":form})
 
+def user_view(request):
+	cuser = request.session['member_id']
+	x = User.objects.get(id = cuser)
+	title = x.username
+	list1 = QuoteModel.objects.all().filter( user__username = x.username)
+	print list1
+	context = {"list1":list1,"title":title}
+	return render(request,"quoteapp/userpage.html",context)
+
 def searchview(request):
     searchform = SearchForm(request.POST or None)
-    if searchform.is_valid():
-        keyword = searchform.cleaned_data.get("keyword")
-        list1 = QuoteModel.objects.all().filter( qname = keyword )
-        context = {"list1":list1}
-        return render(request, "quoteapp/all.html", context)
-    context = {"searchform":searchform}
-    return render(request, "quoteapp/search.html", context)
+    try:
+	    if request.session['member_id']:
+		    if searchform.is_valid():
+		        keyword = searchform.cleaned_data.get("keyword")
+		        list1 = QuoteModel.objects.all().filter( qname = keyword )
+		        context = {"list1":list1}
+		        return render(request, "quoteapp/search.html", context)
+		    context = {"searchform":searchform}
+		    return render(request, "quoteapp/search.html", context)
+    except KeyError:
+		form = "Please login to proceed"
+		return render(request,"quoteapp/index.html",{"form":form})
 
 def register_view(request):
 	form = UserRegisterForm(request.POST or None)

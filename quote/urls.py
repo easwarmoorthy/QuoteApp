@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^search/',searchview,name ='searchview'),
     url(r'^delete/(?P<pk>[0-9]+)/$',delete_view,name='deletequotes'),
     url(r'^login',login_view,name='login'),
+    url(r'^user',user_view,name='userview'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
