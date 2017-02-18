@@ -1,9 +1,18 @@
 {% block content %}
 {% load static %}
+
 <link href="https://fonts.googleapis.com/css?family=Droid+Serif|Roboto" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/quoteapp/style2.css" />
 <link rel="stylesheet" type="text/css" href="/static/quoteapp/style.css" />
-<div class="head">
+<link href="/static/quoteapp/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<ul class="nav nav-tabs">
+  <li role="presentation"><a href="/all/">All Quotes</a></li>
+  <li role="presentation"><a href="/quote/">Add Quotes</a></li>
+  <li role="presentation"><a href="/user/">User</a></li>
+  <li role="presentation"><a href="/search/">Search</a></li>
+  <li role="presentation"><a href="/logout/">Logout</a></li>
+</ul>
+<!-- <div class="head">
   <div class="logout">
     <form action="/search/">
       <input type="submit" value="Search" />
@@ -25,9 +34,12 @@
   </form>
 </div>
 </div>
+-->
 <form method= "POST" action="">{% csrf_token %}
   {{searchform}}
+  {% if searchform != None %}
 <p class="submit"><input type="submit"></input></p>
+{% endif %}
 </form>
 {% for x in list1%}
 <div class="item">
@@ -35,6 +47,6 @@
 <p> {{x.quote}} </p></div>
 <div class="qname">
 <p> {{x.qname}} </p> </div>
+</div>
 {% endfor %}
-
 {% endblock content%}
